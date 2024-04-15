@@ -10,11 +10,47 @@ const AppDataSource = new DataSource({
 	synchronize: true,
 });
 
+// import apollo here
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+
+const typeDefs = `#graphql
+
+  type Country {
+		id: Int
+    code: String
+    name: String
+    emoji: String
+  }
+
+  type Query {
+    countries: [Country]
+  }
+`;
+
+const resolvers = {
+	Query: {
+		countries: () => Country.find(),
+	},
+};
+
 // add a scrypt to test our connexion and manipulate data
 async function main() {
 	try {
 		await AppDataSource.initialize();
-		console.log("Data Source has been initialized!");
+
+		// run apollog server here
+		const server = new ApolloServer({
+			typeDefs,
+			resolvers,
+		});
+
+		// add port and standalone server for test
+		const { url } = await startStandaloneServer(server, {
+			listen: { port: 4000 },
+		});
+
+		console.log(`🚀  Server ready at: ${url}`);
 
 		// example/sample data with new country:
 		let france = new Country();
