@@ -3,6 +3,13 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import Country from "./entities/country";
 
+// import apollo and typegraphQL
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+import { buildSchema } from "type-graphql";
+import { CountryResolver } from "./resolvers/countryResolver";
+
+// configure datasource here
 const AppDataSource = new DataSource({
 	type: "sqlite",
 	database: "db.sqlite",
@@ -10,42 +17,43 @@ const AppDataSource = new DataSource({
 	synchronize: true,
 });
 
-// import apollo here
-import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
+// delete MANUAL typeDefs and resolvers
+// const typeDefs = `#graphql
 
-const typeDefs = `#graphql
+//   type Country {
+// 		id: Int
+//     code: String
+//     name: String
+//     emoji: String
+//   }
 
-  type Country {
-		id: Int
-    code: String
-    name: String
-    emoji: String
-  }
+//   type Query {
+//     countries: [Country]
+//   }
+// `;
 
-  type Query {
-    countries: [Country]
-  }
-`;
-
-const resolvers = {
-	Query: {
-		countries: () => Country.find(),
-	},
-};
+// const resolvers = {
+// 	Query: {
+// 		countries: () => Country.find(),
+// 	},
+// };
 
 // add a scrypt to test our connexion and manipulate data
 async function main() {
 	try {
 		await AppDataSource.initialize();
 
-		// run apollog server here
-		const server = new ApolloServer({
-			typeDefs,
-			resolvers,
+		// add schema with typegraphql
+		const schema = await buildSchema({
+			resolvers: [CountryResolver],
 		});
 
-		// add port and standalone server for test
+		// new config for run apollo server with schema here
+		const server = new ApolloServer({
+			schema,
+		});
+
+		// RUN APOLLO SERVER
 		const { url } = await startStandaloneServer(server, {
 			listen: { port: 4000 },
 		});
