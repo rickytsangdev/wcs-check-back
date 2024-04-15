@@ -11,6 +11,12 @@
 	"author": "Ricky Tsang",
 	"license": "ISC",
 	"devDependencies": {
+		"@types/node": "^20.12.7",
 		"typescript": "^5.4.5"
+	},
+	"dependencies": {
+		"reflect-metadata": "^0.2.2",
+		"sqlite3": "^5.1.7",
+		"typeorm": "^0.3.20"
 	}
 }
