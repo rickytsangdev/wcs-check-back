@@ -18,12 +18,14 @@ export class CountryResolver {
 	async addCountry(
 		@Arg("code") code: string,
 		@Arg("name") name: string,
-		@Arg("emoji") emoji: string
+		@Arg("emoji") emoji: string,
+		@Arg("continentCode", { nullable: true }) continentCode?: string
 	): Promise<Country> {
 		const country = Country.create({
 			code,
 			name,
 			emoji,
+			continentCode,
 		});
 		await country.save();
 		return country;

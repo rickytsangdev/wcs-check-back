@@ -19,6 +19,10 @@ export class Country extends BaseEntity {
 	@Field()
 	@Column()
 	emoji!: string;
+
+	@Field({ nullable: true }) // nullable le rend facultatif
+	@Column({ nullable: true })
+	continentCode!: string;
 }
 
 export default Country;
