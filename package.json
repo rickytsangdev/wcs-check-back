@@ -1,0 +1,16 @@
+{
+	"name": "my-graphql-api",
+	"version": "0.0.1",
+	"description": "a quick server to save and retrieve country info with their code, name and so on.",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc",
+		"start": "node dist/index.js"
+	},
+	"author": "Ricky Tsang",
+	"license": "ISC",
+	"devDependencies": {
+		"typescript": "^5.4.5"
+	}
+}
